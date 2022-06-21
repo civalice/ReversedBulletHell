@@ -51,6 +51,12 @@ namespace Urxxx.GamePlay
             return player.gameObject;
         }
 
+        public GameObject GetNearestEnemy(Vector3 position)
+        {
+            //Todo: GetNearest enemy
+            return null;
+        }
+
         #endregion
 
         #region Private Method

@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Urxxx.GamePlay
 {
-    public interface ISpawnerObject
+    public class HolmingBullet : BaseBullet
     {
-        Vector3 GetSpawnPoint();
+        protected Transform Target;
     }
 }

@@ -5,17 +5,34 @@ using UnityEngine;
 namespace Urxxx.GamePlay
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, ITarget
     {
+        #region Property fields
+
+        public Vector3 Direction { get; private set; }
+        public float CurrentHealth => currentHealth;
+        public bool IsDead => CurrentHealth <= 0;
+
+        #endregion
+
+        #region Protect serialized fields
+
+        [SerializeField] protected float MaxHealth;
+
+        #endregion
+
         #region Private serialized fields
 
-        [SerializeField] private float speed = 1.0f;
+        [SerializeField] private float speed = 30.0f;
 
         #endregion
 
         #region Private nonserialized fields
 
         private Rigidbody2D rigidBody;
+        private float currentHealth;
+        
+        private 
 
         #endregion
 
@@ -24,6 +41,7 @@ namespace Urxxx.GamePlay
         void Awake()
         {
             rigidBody = GetComponent<Rigidbody2D>();
+            Direction = Vector3.right;
         }
         // Start is called before the first frame update
         void Start()
@@ -44,6 +62,11 @@ namespace Urxxx.GamePlay
         #endregion
 
         #region Public Method
+
+        public void ResetPlayer()
+        {
+            currentHealth = MaxHealth;
+        }
 
         #endregion
 
@@ -74,6 +97,26 @@ namespace Urxxx.GamePlay
             }
 
             rigidBody.velocity = targetDirection.normalized * distanceDelta;
+            if (targetDirection.magnitude > 0)
+                Direction = targetDirection.normalized;
+        }
+
+        private void Death()
+        {
+            //Todo: Kill Player
+        }
+
+        #endregion
+
+        #region ITarget Implementation
+
+        public void DamageTaken(float damage)
+        {
+            currentHealth -= damage;
+            if (currentHealth <= 0)
+            {
+                Death();
+            }
         }
 
         #endregion
