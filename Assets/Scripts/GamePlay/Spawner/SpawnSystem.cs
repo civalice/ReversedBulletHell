@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
 
@@ -30,7 +31,7 @@ namespace Urxxx.GamePlay
         private List<ISpawnerObject> spawnerAreaList = new List<ISpawnerObject>();
         private List<BaseEnemy> enemyList = new List<BaseEnemy>();
 
-            #endregion
+        #endregion
 
         #region LifeCycle Method
 
@@ -61,6 +62,39 @@ namespace Urxxx.GamePlay
                 enemy.Setup(RemoveEnemy);
                 enemyList.Add(enemy);
             }
+        }
+
+        #endregion
+
+        #region Public Method
+
+        public BaseEnemy GetNearestEnemy(Vector3 position, List<Transform> ignoreList = null)
+        {
+            bool isFirst = true;
+            float minRange = -1;
+            BaseEnemy result = null;
+            foreach (var enemy in enemyList)
+            {
+                if (ignoreList != null && ignoreList.Contains(enemy.transform)) continue;
+                float range = (enemy.transform.position - position).magnitude;
+                if (isFirst)
+                {
+                    minRange = range;
+                    result = enemy;
+                    isFirst = false;
+                    continue;
+                }
+                else
+                {
+                    if (minRange > range)
+                    {
+                        minRange = range;
+                        result = enemy;
+                    }
+                }
+            }
+
+            return result;
         }
 
         #endregion

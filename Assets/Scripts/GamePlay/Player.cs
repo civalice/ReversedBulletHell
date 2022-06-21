@@ -52,10 +52,6 @@ namespace Urxxx.GamePlay
         // Update is called once per frame
         void Update()
         {
-        }
-
-        void FixedUpdate()
-        {
             InputUpdate();
         }
 
@@ -74,7 +70,7 @@ namespace Urxxx.GamePlay
 
         private void InputUpdate()
         {
-            float distanceDelta = Time.fixedDeltaTime * speed;
+            float distanceDelta = Time.deltaTime * speed;
             Vector3 targetDirection = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
             {
@@ -96,7 +92,9 @@ namespace Urxxx.GamePlay
                 targetDirection += Vector3.right;
             }
 
-            rigidBody.velocity = targetDirection.normalized * distanceDelta;
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + targetDirection.normalized * speed, distanceDelta);
+
+            //rigidBody.velocity = targetDirection.normalized * distanceDelta;
             if (targetDirection.magnitude > 0)
                 Direction = targetDirection.normalized;
         }

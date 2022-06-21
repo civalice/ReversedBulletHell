@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Urxxx.GamePlay
@@ -9,6 +10,7 @@ namespace Urxxx.GamePlay
         #region Protect serialized fields
 
         [SerializeField] protected GameObject HitEffectPrefab;
+        [SerializeField] protected float BulletSize = 1.0f;
         [SerializeField] protected float BulletRange = 10f;
         [SerializeField] protected float Damage = 1.0f;
         [SerializeField] protected float ProjectileSpeed = 3.0f;
@@ -21,6 +23,8 @@ namespace Urxxx.GamePlay
         protected Vector3 StartPosition;
         protected Vector3 TargetDirection;
         protected bool IsBulletLaunch = false;
+        protected Vector3 PreviousFramePosition;
+        protected List<Transform> PiecingList = new List<Transform>();
 
         #endregion
 
@@ -35,13 +39,9 @@ namespace Urxxx.GamePlay
         // Update is called once per frame
         protected virtual void Update()
         {
-
-        }
-
-        protected virtual void FixedUpdate()
-        {
             if (!IsBulletLaunch) return;
-            if (IsComplete()) Destroy(gameObject);
+            if (IsComplete()) 
+                Destroy(gameObject);
         }
 
         #endregion
@@ -85,13 +85,29 @@ namespace Urxxx.GamePlay
                     Random.Range(-randomVal, randomVal)), Quaternion.identity);
         }
 
-        protected virtual void HitTarget(RaycastHit2D hitTarget)
+        protected RaycastHit2D[] GetHitCast(LayerMask layer)
         {
-            var enemy = hitTarget.transform.parent?.GetComponent<BaseEnemy>();
-            if (enemy != null)
-            {
-                enemy.DamageTaken(Damage);
-            }
+            if (BulletSize > 0)
+                return Physics2D.CircleCastAll(PreviousFramePosition, BulletSize, TargetDirection, ProjectileSpeed * 10,
+                    layer);
+            else
+                return Physics2D.RaycastAll(PreviousFramePosition, TargetDirection, ProjectileSpeed * 10, layer);
+        }
+
+        protected bool IsBetweenPreviousFrame(Vector3 position)
+        {
+            var previousRange = (transform.position - PreviousFramePosition).magnitude;
+            var testRange = (position - PreviousFramePosition).magnitude;
+            return previousRange >= testRange;
+        }
+
+        protected bool IsPointInsideCollider(Collider2D collider)
+        {
+            if (BulletSize > 0)
+                return Physics2D.OverlapCircleAll(PreviousFramePosition, BulletSize).Contains(collider) ||
+                       Physics2D.OverlapCircleAll(transform.position, BulletSize).Contains(collider);
+            else
+                return collider.OverlapPoint(PreviousFramePosition) || collider.OverlapPoint(transform.position);
         }
 
         #endregion

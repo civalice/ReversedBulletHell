@@ -8,7 +8,7 @@ namespace Urxxx.GamePlay
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(CircleCollider2D))]
-    public class BaseEnemy : MonoBehaviour, ITarget
+    public class BaseEnemy : MonoBehaviour, ITarget, IDamageDealer
     {
         #region Protect serialized fields
 
@@ -30,7 +30,7 @@ namespace Urxxx.GamePlay
 
         #endregion
 
-        private float fireRateTiming = 0;
+        private float attackRateTiming = 0;
 
         #region LifeCycle Method
 
@@ -51,10 +51,15 @@ namespace Urxxx.GamePlay
         protected void Update()
         {
             UpdateTarget();
+            attackRateTiming -= Time.deltaTime;
             if (CheckAttackRange())
             {
-                //Attack
                 RigidBody.velocity = Vector2.zero;
+                //Attack
+                if (attackRateTiming <= 0)
+                {
+                    if (TryAttack()) attackRateTiming = 100f / AttackRate;
+                }
             }
             else
             {
@@ -62,8 +67,11 @@ namespace Urxxx.GamePlay
             }
         }
 
-        protected void FixedUpdate()
+        protected void OnDrawGizmos()
         {
+            Gizmos.color = Color.yellow;
+            var collider = GetComponent<CircleCollider2D>();
+            Gizmos.DrawWireSphere(transform.position, AttackRange + collider.radius);
         }
 
         #endregion
@@ -109,6 +117,13 @@ namespace Urxxx.GamePlay
             return false;
         }
 
+        private bool TryAttack()
+        {
+            if (Target == null) return false;
+            DamageSystem.Instance.DamagingTarget(this, Target.transform);
+            return true;
+        }
+
         private void MoveTowardTarget()
         {
             if (Target == null) return;
@@ -130,5 +145,15 @@ namespace Urxxx.GamePlay
         }
 
         #endregion
+
+        #region IDamageDealer implement
+
+        public float DealDamage()
+        {
+            return Damage;
+        }
+
+        #endregion
+
     }
 }

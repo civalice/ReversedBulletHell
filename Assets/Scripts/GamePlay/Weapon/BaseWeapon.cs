@@ -43,7 +43,7 @@ namespace Urxxx.GamePlay
 
         }
 
-        protected virtual void FixedUpdate()
+        protected virtual void Update()
         {
             timing += Time.deltaTime;
             while (timing > FireRate)
