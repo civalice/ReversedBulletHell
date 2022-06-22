@@ -10,6 +10,7 @@ namespace Urxxx.GamePlay
     {
         [SerializeField] private TextMeshProUGUI hpText;
         [SerializeField] private TextMeshProUGUI startText;
+        [SerializeField] private TextMeshProUGUI expText;
 
         // Start is called before the first frame update
         void Start()
@@ -27,6 +28,12 @@ namespace Urxxx.GamePlay
         {
             if (hpText == null) return;
             hpText.text = $"{player.CurrentHp}/{player.MaxHp}";
+        }
+
+        public void SetExpText(string txt)
+        {
+            if (expText == null) return;
+            expText.text = txt;
         }
 
         public void SetStartText(string text)

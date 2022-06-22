@@ -13,6 +13,7 @@ namespace Urxxx.GamePlay
         #region Property fields
 
         public float Speed => BaseSpeed * statModifier.SpeedModifier;
+        public int ExpGain => (int)(BaseExp * GameController.Instance.ExpMultiplier);
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace Urxxx.GamePlay
         [SerializeField] protected float Damage;
         [SerializeField] protected float AttackRate;
         [SerializeField] protected float AttackRange = 0.2f;
+        [SerializeField] protected int BaseExp = 2;
 
         #endregion
 
@@ -56,7 +58,7 @@ namespace Urxxx.GamePlay
         // Start is called before the first frame update
         protected void Start()
         {
-            CurrentHealth = MaxHealth;
+            CurrentHealth = MaxHealth * GameController.Instance.HpMultiplier;
         }
 
         // Update is called once per frame
@@ -180,6 +182,7 @@ namespace Urxxx.GamePlay
             CurrentHealth -= damage;
             if (CurrentHealth <= 0)
             {
+                GameController.Instance.GainExp(ExpGain);
                 OnDeathAction(this);
             }
         }

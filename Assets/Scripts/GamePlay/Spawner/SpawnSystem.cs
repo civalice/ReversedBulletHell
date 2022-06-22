@@ -23,7 +23,7 @@ namespace Urxxx.GamePlay
 
         [SerializeField] protected List<GameObject> SpawnerObjectList;
         [SerializeField] protected List<SpawnData> SpawnDataList;
-        [SerializeField] protected int StartSpawnCount = 20;
+        [SerializeField] protected int StartSpawnCount => 20 + GameController.Instance.IncreaseSpawn;
 
         #endregion
 
