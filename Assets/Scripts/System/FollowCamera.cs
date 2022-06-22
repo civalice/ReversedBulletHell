@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Urxxx.System
@@ -35,6 +33,15 @@ namespace Urxxx.System
             position = Vector3.Lerp(position, FollowTarget.position, Time.deltaTime * speed);
             position.z = transform.position.z;
             transform.position = position;
+        }
+
+        #endregion
+
+        #region Public Method
+
+        public void ResetCamera()
+        {
+            transform.position = new Vector3(0, 0, transform.position.z);
         }
 
         #endregion

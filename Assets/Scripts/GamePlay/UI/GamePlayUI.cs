@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Urxxx.GamePlay
 {
@@ -11,6 +8,7 @@ namespace Urxxx.GamePlay
         [SerializeField] private TextMeshProUGUI hpText;
         [SerializeField] private TextMeshProUGUI startText;
         [SerializeField] private TextMeshProUGUI expText;
+        [SerializeField] private TextMeshProUGUI levelText;
 
         // Start is called before the first frame update
         void Start()
@@ -34,6 +32,12 @@ namespace Urxxx.GamePlay
         {
             if (expText == null) return;
             expText.text = txt;
+        }
+
+        public void SetLevel(int level)
+        {
+            if (levelText == null) return;
+            levelText.text = level.ToString();
         }
 
         public void SetStartText(string text)

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using Urxxx.System;
 using Utilities;
@@ -122,14 +119,15 @@ namespace Urxxx.GamePlay
         public void GainExp(int exp)
         {
             currentExperience += exp;
-            gameUi.SetExpText($"{currentExperience}/{nextLevelExperience}");
             if (currentExperience >= nextLevelExperience)
             {
                 currentExperience = 0;
                 currentLevel++;
+                gameUi.SetLevel(currentLevel + 1); ;
                 nextLevelExperience += 100;
                 ShowUpgrade();
             }
+            gameUi.SetExpText($"{currentExperience}/{nextLevelExperience}");
         }
 
         #endregion
@@ -140,6 +138,7 @@ namespace Urxxx.GamePlay
         {
             if (mainCamera != null && player != null)
             {
+                mainCamera.ResetCamera();
                 mainCamera.FollowTarget = player.transform;
             }
         }
@@ -173,6 +172,7 @@ namespace Urxxx.GamePlay
             currentExperience = 0;
             nextLevelExperience = 100;
             gameUi.SetExpText($"{currentExperience}/{nextLevelExperience}");
+            gameUi.SetLevel(currentLevel + 1);
             SpawnSystem.Instance.Reset();
             SpawnSystem.Instance.StartSpawn();
             ShowUpgrade();

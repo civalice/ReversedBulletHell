@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Jobs;
 using UnityEngine;
 
 namespace Urxxx.GamePlay
@@ -42,9 +40,9 @@ namespace Urxxx.GamePlay
 
         private List<BaseStatusEffect> statusEffectList = new List<BaseStatusEffect>();
         private StatModifier statModifier = new StatModifier(1f);
-        #endregion
-
         private float attackRateTiming = 0;
+
+        #endregion
 
         #region LifeCycle Method
 
@@ -81,6 +79,8 @@ namespace Urxxx.GamePlay
             {
                 MoveTowardTarget();
             }
+
+            CheckDeadZone();
         }
 
         protected void OnDrawGizmos()
@@ -99,9 +99,16 @@ namespace Urxxx.GamePlay
             OnDeathAction += onDeath;
         }
 
-        public void ForceKill()
+        public void ForceKill(bool isCallAction = false)
         {
-            Death(this);
+            if (isCallAction)
+            {
+                OnDeathAction(this);
+            }
+            else
+            {
+                Death(this);
+            }
         }
 
         #endregion
@@ -122,6 +129,16 @@ namespace Urxxx.GamePlay
             if (GameController.Instance != null && Target == null)
             {
                 Target = GameController.Instance.GetCurrentPlayer();
+            }
+        }
+
+        private void CheckDeadZone()
+        {
+            var camVector = Camera.main.transform.position - transform.position;
+            camVector.z = 0;
+            if (camVector.magnitude > 6)
+            {
+                ForceKill(true);
             }
         }
 
@@ -224,6 +241,5 @@ namespace Urxxx.GamePlay
         }
 
         #endregion
-
     }
 }
