@@ -7,19 +7,26 @@ namespace Urxxx.GamePlay
 {
     public abstract class BaseBullet : MonoBehaviour, IDamageDealer
     {
+        #region Property fields
+
+        public float Damage => Weapon.Damage;
+        public float ProjectileSpeed => Weapon.ProjectileSpeed;
+        public int PiecingCount => Weapon.PiecingCount;
+        public float AoE => Weapon.AoERadius;
+
+        #endregion
         #region Protect serialized fields
 
         [SerializeField] protected GameObject HitEffectPrefab;
         [SerializeField] protected float BulletSize = 1.0f;
         [SerializeField] protected float BulletRange = 10f;
-        [SerializeField] protected float Damage = 1.0f;
-        [SerializeField] protected float ProjectileSpeed = 3.0f;
-        [SerializeField] protected int PiecingCount = 1;
 
         #endregion
 
         #region Protect nonserialized fields
 
+        protected bool SubSpawn = false;
+        protected BaseWeapon Weapon;
         protected Vector3 StartPosition;
         protected Vector3 TargetDirection;
         protected bool IsBulletLaunch = false;
@@ -54,11 +61,12 @@ namespace Urxxx.GamePlay
             HitEffects.Add(hitEffect);
         }
 
-        public virtual void SetupBullet(float damage, float speed, int piecingCount)
+        public virtual void SetupBullet(BaseWeapon weapon, bool subSpawn, List<Transform> ignoreList)
         {
-            Damage = damage;
-            ProjectileSpeed = speed;
-            PiecingCount = piecingCount;
+            Weapon = weapon;
+            SubSpawn = subSpawn;
+            if (ignoreList != null)
+                PiecingList.AddRange(ignoreList);
             StartPosition = transform.position;
         }
 
@@ -83,8 +91,29 @@ namespace Urxxx.GamePlay
             var target = targetTransform.GetComponent<ITarget>();
             if (target != null)
             {
+                if (AoE > 0)
+                {
+                    LayerMask hitLayer = LayerMask.GetMask("Enemy");
+                    var aoeTargetList = Physics2D.OverlapCircleAll(targetTransform.position, AoE, hitLayer);
+                    foreach (var aoeTarget in aoeTargetList)
+                    {
+                        if (aoeTarget.transform == targetTransform) continue;
+                        var targetComponent = aoeTarget.gameObject.GetComponent<ITarget>();
+                        if (targetComponent != null)
+                        {
+                            Vector3 aoeDirection = aoeTarget.transform.position - targetTransform.position;
+                            DamageSystem.Instance.DamagingTarget(this, targetComponent);
+                            targetComponent.AddHitEffect(HitEffects, aoeDirection.normalized);
+                        }
+                    }
+                }
                 DamageSystem.Instance.DamagingTarget(this, target);
                 target.AddHitEffect(HitEffects, direction);
+                if (SubSpawn)
+                {
+                    Weapon.FireBullet(targetTransform.position, direction, false, PiecingList);
+                    SubSpawn = false;
+                }
                 if (PiecingList.Count >= PiecingCount)
                     Destroy(gameObject);
             }

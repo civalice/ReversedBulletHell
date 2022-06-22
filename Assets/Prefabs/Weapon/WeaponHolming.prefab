@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 7086906364424269845, guid: 6377781354236784aa4c292a904f5167, type: 3}
-  PiecingCount: 10
-  FireRate: 3
-  Damage: 5
-  ProjectileSpeed: 1
+  BasePiecingCount: 1
+  BaseFireRate: 300
+  BaseDamage: 2
+  BaseProjectileSpeed: 2
   Owner: {fileID: 0}

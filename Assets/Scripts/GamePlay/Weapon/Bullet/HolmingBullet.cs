@@ -14,6 +14,8 @@ namespace Urxxx.GamePlay
         {
             base.Update();
 
+            if (PiecingList.Contains(Target)) Target = null;
+
             if (Target == null)
             {
                 Target = SpawnSystem.Instance.GetNearestEnemy(transform.position, PiecingList).transform;
