@@ -9,7 +9,7 @@ namespace Urxxx.GamePlay
         protected float Damage = 1f;
         protected float Duration = 5f;
 
-        public override BaseStatusEffect CreateStatusEffect()
+        public override BaseStatusEffect CreateStatusEffect(Vector3 direction)
         {
             var burnStatusEffect = new BurnStatusEffect();
             burnStatusEffect.Setup(Damage, Duration);

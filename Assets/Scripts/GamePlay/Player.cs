@@ -128,7 +128,7 @@ namespace Urxxx.GamePlay
             }
         }
 
-        public void AddHitEffect(List<BaseHitEffect> hitEffects)
+        public void AddHitEffect(List<BaseHitEffect> hitEffects, Vector3 direction)
         {
             //Do nothing for player because no enemy cause any HitEffect yet.
         }

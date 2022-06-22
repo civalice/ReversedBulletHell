@@ -32,7 +32,7 @@ namespace Urxxx.GamePlay
                     if (IsBetweenPreviousFrame(hit.point) || IsPointInsideCollider(hit.collider))
                     {
                         //Add to hit list
-                        HitTarget(hit.transform);
+                        HitTarget(hit.transform, TargetDirection.normalized);
                         PlayHitEffect(hit.point);
                     }
                 }

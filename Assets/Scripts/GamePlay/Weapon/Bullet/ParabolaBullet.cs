@@ -27,7 +27,7 @@ namespace Urxxx.GamePlay
                     //calculate collider range
                     if (IsBetweenPreviousFrame(hit.point) || IsPointInsideCollider(hit.collider))
                     {
-                        HitTarget(hit.transform);
+                        HitTarget(hit.transform, TargetDirection.normalized);
                         PlayHitEffect(hit.point);
                     }
                 }

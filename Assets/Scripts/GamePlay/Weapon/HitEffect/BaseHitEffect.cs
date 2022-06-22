@@ -4,6 +4,6 @@ namespace Urxxx.GamePlay
 {
     public abstract class BaseHitEffect
     {
-        public abstract BaseStatusEffect CreateStatusEffect();
+        public abstract BaseStatusEffect CreateStatusEffect(Vector3 direction);
     }
 }

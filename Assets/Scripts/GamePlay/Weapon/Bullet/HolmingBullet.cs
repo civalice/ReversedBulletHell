@@ -26,7 +26,7 @@ namespace Urxxx.GamePlay
 
             if ((Target.position - transform.position).magnitude < 0.1f)
             {
-                HitTarget(Target);
+                HitTarget(Target, TargetDirection.normalized);
                 PlayHitEffect(Target.position);
             }
 

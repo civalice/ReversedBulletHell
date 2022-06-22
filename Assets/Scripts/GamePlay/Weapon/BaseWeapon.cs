@@ -34,7 +34,9 @@ namespace Urxxx.GamePlay
 
         protected virtual void Awake()
         {
-            HitEffectList.Add(new BurnHitEffect());
+            //HitEffectList.Add(new BurnHitEffect());
+            HitEffectList.Add(new FreezeHitEffect());
+            HitEffectList.Add(new KnockBackHitEffect());
         }
 
         // Start is called before the first frame update

@@ -13,12 +13,12 @@ namespace Urxxx.GamePlay
         protected float Duration = 3f;
 
         private float elapsedTime = 0;
-
         public void Setup(float slowRate, float duration)
         {
             SlowRate = slowRate;
             Duration = duration;
             elapsedTime = Duration;
+            StatMod.SpeedModifier = SlowRate;
         }
 
         public override void UpdateEffect()

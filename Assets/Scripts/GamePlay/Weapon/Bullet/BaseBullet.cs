@@ -77,14 +77,14 @@ namespace Urxxx.GamePlay
             return (transform.position - StartPosition).magnitude > BulletRange;
         }
 
-        protected virtual void HitTarget(Transform targetTransform)
+        protected virtual void HitTarget(Transform targetTransform, Vector3 direction)
         {
             PiecingList.Add(targetTransform);
             var target = targetTransform.GetComponent<ITarget>();
             if (target != null)
             {
                 DamageSystem.Instance.DamagingTarget(this, target);
-                target.AddHitEffect(HitEffects);
+                target.AddHitEffect(HitEffects, direction);
                 if (PiecingList.Count >= PiecingCount)
                     Destroy(gameObject);
             }

@@ -10,10 +10,16 @@ namespace Urxxx.GamePlay
     [RequireComponent(typeof(CircleCollider2D))]
     public class BaseEnemy : MonoBehaviour, ITarget, IDamageDealer
     {
+        #region Property fields
+
+        public float Speed => BaseSpeed * statModifier.SpeedModifier;
+
+        #endregion
+
         #region Protect serialized fields
 
         [SerializeField] protected GameObject Target;
-        [SerializeField] protected float Speed = 0.3f;
+        [SerializeField] protected float BaseSpeed = 30f;
         [SerializeField] protected float MaxHealth;
         [SerializeField] protected float Damage;
         [SerializeField] protected float AttackRate;
@@ -33,7 +39,7 @@ namespace Urxxx.GamePlay
         #region Private nonserialized fields
 
         private List<BaseStatusEffect> statusEffectList = new List<BaseStatusEffect>();
-
+        private StatModifier statModifier = new StatModifier(1f);
         #endregion
 
         private float attackRateTiming = 0;
@@ -114,6 +120,7 @@ namespace Urxxx.GamePlay
 
         private void UpdateHitEffect()
         {
+            statModifier.Reset();
             foreach (var statusEffect in statusEffectList)
             {
                 statusEffect.UpdateEffect();
@@ -155,7 +162,8 @@ namespace Urxxx.GamePlay
         {
             if (Target == null) return;
             Vector3 targetVector = Target.transform.position - transform.position;
-            RigidBody.velocity = Time.deltaTime * targetVector.normalized * Speed;
+            RigidBody.AddForce(targetVector.normalized * Speed);
+            RigidBody.velocity = Vector3.ClampMagnitude(RigidBody.velocity, Speed);
         }
 
         #endregion
@@ -183,6 +191,9 @@ namespace Urxxx.GamePlay
         public void ModifyStat(BaseStatusEffect stat)
         {
             //use stat to mod
+            StatModifier statMod = stat.GetStatModifier();
+            if (statMod == null) return;
+            statModifier.SpeedModifier *= statMod.SpeedModifier;
         }
 
         #endregion
@@ -194,11 +205,11 @@ namespace Urxxx.GamePlay
             return Damage;
         }
 
-        public void AddHitEffect(List<BaseHitEffect> hitEffects)
+        public void AddHitEffect(List<BaseHitEffect> hitEffects, Vector3 direction)
         {
             foreach (var hitEffect in hitEffects)
             {
-                var statusEffect = hitEffect.CreateStatusEffect();
+                var statusEffect = hitEffect.CreateStatusEffect(direction);
                 statusEffect.SetOwner(this);
                 statusEffectList.Add(statusEffect);
             }

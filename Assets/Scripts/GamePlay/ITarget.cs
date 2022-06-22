@@ -9,6 +9,6 @@ namespace Urxxx.GamePlay
         Transform GetTargetTransform();
         T GetTargetComponent<T>();
         void DamageTaken(float damage);
-        void AddHitEffect(List<BaseHitEffect> hitEffects);
+        void AddHitEffect(List<BaseHitEffect> hitEffects, Vector3 direction);
     }
 }
