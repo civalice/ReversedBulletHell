@@ -27,7 +27,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -44,9 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772e0f4d3dea36c41bfe811fb10eeb46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsAvailable: 0
+  UpgradeList: 
   BulletPrefab: {fileID: 7086906364424269845, guid: 6377781354236784aa4c292a904f5167, type: 3}
   BasePiecingCount: 1
   BaseFireRate: 300
-  BaseDamage: 2
+  BaseDamage: 6
   BaseProjectileSpeed: 2
   Owner: {fileID: 0}

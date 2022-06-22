@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Urxxx.GamePlay
 {
@@ -38,6 +39,7 @@ namespace Urxxx.GamePlay
 
         #region Private nonserialized fields
 
+        private Animator animator;
         private List<BaseStatusEffect> statusEffectList = new List<BaseStatusEffect>();
         private StatModifier statModifier = new StatModifier(1f);
         private float attackRateTiming = 0;
@@ -50,6 +52,7 @@ namespace Urxxx.GamePlay
         {
             RigidBody = GetComponent<Rigidbody2D>();
             Collider = GetComponent<CircleCollider2D>();
+            animator = GetComponent<Animator>();
             OnDeathAction += Death;
         }
 
@@ -116,6 +119,11 @@ namespace Urxxx.GamePlay
         #region Protect Method
 
         protected virtual void Death(BaseEnemy enemy)
+        {
+            animator.SetBool("IsDead", true);
+        }
+
+        protected void Destroy()
         {
             Destroy(gameObject);
         }
@@ -186,8 +194,12 @@ namespace Urxxx.GamePlay
         {
             if (Target == null) return;
             Vector3 targetVector = Target.transform.position - transform.position;
+            targetVector.x += Random.Range(-1f, 1f);
+            targetVector.y += Random.Range(-1f, 1f);
             RigidBody.AddForce(targetVector.normalized * Speed);
             RigidBody.velocity = Vector3.ClampMagnitude(RigidBody.velocity, Speed);
+            Debug.Log($"{RigidBody.velocity.magnitude / Speed}");
+            animator.SetFloat("Speed", RigidBody.velocity.magnitude / Speed);
         }
 
         #endregion

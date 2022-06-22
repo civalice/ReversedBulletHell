@@ -28,10 +28,12 @@ namespace Urxxx.GamePlay
         #region Private serialized fields
 
         [SerializeField] private float speed = 30.0f;
+
         #endregion
 
         #region Private nonserialized fields
 
+        private Animator animator;
         private Rigidbody2D rigidBody;
         private float currentHealth;
         
@@ -44,6 +46,7 @@ namespace Urxxx.GamePlay
         void Awake()
         {
             rigidBody = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
             Direction = Vector3.right;
         }
         // Start is called before the first frame update
@@ -80,31 +83,79 @@ namespace Urxxx.GamePlay
         {
             float distanceDelta = Time.deltaTime * speed;
             Vector3 targetDirection = Vector3.zero;
+            bool left = false;
+            bool right = false;
+            bool down = false;
+            bool up = false;
             if (Input.GetKey(KeyCode.W))
             {
                 targetDirection += Vector3.up;
+                up = true;
             }
 
             if (Input.GetKey(KeyCode.S))
             {
                 targetDirection += Vector3.down;
+                down = true;
             }
 
             if (Input.GetKey(KeyCode.A))
             {
                 targetDirection += Vector3.left;
+                left = true;
             }
 
             if (Input.GetKey(KeyCode.D))
             {
                 targetDirection += Vector3.right;
+                right = true;
             }
 
+            int direction = 0;
+
+            if (!left && !right && down && !up)
+            {
+                direction = 0;
+            }
+            else if (right && down && !left && !up)
+            {
+                direction = 1;
+            }
+            else if (right && !down && !left && !up)
+            {
+                direction = 2;
+            }
+            else if (right && !down && !left && up)
+            {
+                direction = 3;
+            }
+            else if (!right && !down && !left && up)
+            {
+                direction = 4;
+            }
+            else if (!right && !down && left && up)
+            {
+                direction = 5;
+            }
+            else if (!right && !down && left && !up)
+            {
+                direction = 6;
+            }
+            else if (!right && down && left && !up)
+            {
+                direction = 7;
+            }
+
+            animator.SetInteger("Direction", direction);
             transform.position = Vector3.MoveTowards(transform.position, transform.position + targetDirection.normalized * speed, distanceDelta);
 
             //rigidBody.velocity = targetDirection.normalized * distanceDelta;
-            if (targetDirection.magnitude > 0)
+            bool isWalk = targetDirection.magnitude > 0;
+            animator.SetBool("Walk", isWalk);
+            if (isWalk)
+            {
                 Direction = targetDirection.normalized;
+            }
         }
 
         private void Death()
