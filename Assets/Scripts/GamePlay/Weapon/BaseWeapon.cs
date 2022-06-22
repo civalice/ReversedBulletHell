@@ -16,6 +16,10 @@ namespace Urxxx.GamePlay
         [HideInInspector] public float ProjectileSpeed => BaseProjectileSpeed + BaseStatModifier.ProjectileSpeed;
         [HideInInspector] public float AoERadius => BaseAoERadius + BaseStatModifier.AoERadius;
         [HideInInspector] public bool SubSpawn => BaseStatModifier.SubSpawn;
+        [HideInInspector] public bool IsAvailable = false;
+        [HideInInspector] public List<BaseHitEffect> HitEffects => HitEffectList;
+        [HideInInspector] public List<BaseModifier> Modifiers => ModifierList;
+        [HideInInspector] public List<UpgradeOption> UpgradeList = new List<UpgradeOption>();
         #endregion
 
         #region Protect serialized fields
@@ -58,6 +62,8 @@ namespace Urxxx.GamePlay
 
         protected virtual void Update()
         {
+            if (GameController.Instance.IsPause) return;
+            if (!IsAvailable) return;
             timing += Time.deltaTime;
             while (timing > FireRate)
             {
@@ -73,6 +79,15 @@ namespace Urxxx.GamePlay
         public void SetOwner(Player player)
         {
             Owner = player;
+        }
+
+        public void ResetWeapon()
+        {
+            IsAvailable = false;
+            HitEffectList.Clear();
+            ModifierList.Clear();
+            UpgradeList.Clear();
+            RecalculateStatModifier();
         }
         public virtual void FireBullet(Vector3 position, Vector3 direction, bool subSpawn = false, List<Transform> ignoreList = null)
         {

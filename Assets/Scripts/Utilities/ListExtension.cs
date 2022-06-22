@@ -10,5 +10,13 @@ namespace Utilities
         {
             return list[Random.Range(0, list.Count)];
         }
+
+        public static void RandomRemove<T>(this List<T> list, int count)
+        {
+            while (list.Count > count)
+            {
+                list.RemoveAt(Random.Range(0, list.Count));
+            }
+        }
     }
 }

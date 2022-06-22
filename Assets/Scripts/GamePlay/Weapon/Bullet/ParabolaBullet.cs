@@ -6,11 +6,18 @@ namespace Urxxx.GamePlay
 {
     public class ParabolaBullet : BaseBullet
     {
+        #region Private nonserialized fields
+
         private float yForce = 0;
+
+        #endregion
+
+        #region LifeCycle Method
 
         // Update is called once per frame
         protected override void Update()
         {
+            if (GameController.Instance.IsPause) return;
             base.Update();
             yForce -= Time.deltaTime * 5;
             TargetDirection.y = yForce;
@@ -38,6 +45,11 @@ namespace Urxxx.GamePlay
         {
             Gizmos.DrawWireSphere(transform.position, BulletSize);
         }
+
+        #endregion
+
+        #region Public Method
+
         public override void SetDirection(Vector3 targetDirection)
         {
             base.SetDirection(targetDirection);
@@ -52,5 +64,7 @@ namespace Urxxx.GamePlay
             }
             yForce = 3 * ProjectileSpeed;
         }
+
+        #endregion
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utilities;
 
@@ -28,6 +29,9 @@ namespace Urxxx.GamePlay
 
         #region Private nonserializable fields
 
+        private bool isStart = false;
+        private int currentSpawnCount;
+        private int currentLevel = 1;
         private List<ISpawnerObject> spawnerAreaList = new List<ISpawnerObject>();
         private List<BaseEnemy> enemyList = new List<BaseEnemy>();
 
@@ -52,7 +56,9 @@ namespace Urxxx.GamePlay
         // Update is called once per frame
         void Update()
         {
-            while (enemyList.Count < StartSpawnCount)
+            if (GameController.Instance.IsPause) return;
+            if (!isStart) return;
+            while (enemyList.Count < currentSpawnCount)
             {
                 //Get SpawnData
                 var spawnData = SpawnDataList.RandomItem();
@@ -67,6 +73,29 @@ namespace Urxxx.GamePlay
         #endregion
 
         #region Public Method
+
+        public void StartSpawn()
+        {
+            isStart = true;
+        }
+
+        public void StopSpawn()
+        {
+            isStart = false;
+        }
+
+        public void Reset()
+        {
+            currentSpawnCount = StartSpawnCount;
+            currentLevel = 1;
+        }
+
+        public void IncreaseLevel()
+        {
+            currentLevel++;
+            //Config level up
+            currentSpawnCount += 1;
+        }
 
         public BaseEnemy GetNearestEnemy(Vector3 position, List<Transform> ignoreList = null)
         {
@@ -95,6 +124,15 @@ namespace Urxxx.GamePlay
             }
 
             return result;
+        }
+
+        public void Clear()
+        {
+            foreach (var enemy in enemyList)
+            {
+                enemy.ForceKill();
+            }
+            enemyList.Clear();
         }
 
         #endregion

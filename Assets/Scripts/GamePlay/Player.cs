@@ -11,10 +11,15 @@ namespace Urxxx.GamePlay
         #region Property fields
 
         public Vector3 Direction { get; private set; }
-        public float CurrentHealth => currentHealth;
-        public bool IsDead => CurrentHealth <= 0;
+        public float CurrentHp => currentHealth;
+        public float MaxHp => MaxHealth;
+        public bool IsDead => CurrentHp <= 0;
 
         #endregion
+
+        [SerializeField] public BaseWeapon HolmingWeapon;
+        [SerializeField] public BaseWeapon DiagonalWeapon;
+        [SerializeField] public BaseWeapon ParabolaWeapon;
 
         #region Protect serialized fields
 
@@ -25,7 +30,6 @@ namespace Urxxx.GamePlay
         #region Private serialized fields
 
         [SerializeField] private float speed = 30.0f;
-
         #endregion
 
         #region Private nonserialized fields
@@ -47,7 +51,9 @@ namespace Urxxx.GamePlay
         // Start is called before the first frame update
         void Start()
         {
-
+            HolmingWeapon.SetOwner(this);
+            DiagonalWeapon.SetOwner(this);
+            ParabolaWeapon.SetOwner(this);
         }
 
         // Update is called once per frame
@@ -63,6 +69,9 @@ namespace Urxxx.GamePlay
         public void ResetPlayer()
         {
             currentHealth = MaxHealth;
+            HolmingWeapon.ResetWeapon();
+            DiagonalWeapon.ResetWeapon();
+            ParabolaWeapon.ResetWeapon();
         }
 
         #endregion
@@ -136,6 +145,64 @@ namespace Urxxx.GamePlay
         public Transform GetTargetTransform()
         {
             return transform;
+        }
+
+        public void UpgradeWeapon(UpgradeInfo upgrade)
+        {
+            switch (upgrade.Option)
+            {
+                case UpgradeOption.Enable:
+                {
+                    upgrade.Weapon.IsAvailable = true;
+                }
+                    break;
+                case UpgradeOption.AddBurnEffect:
+                {
+                    upgrade.Weapon.AddHitEffect(new BurnHitEffect());
+                }
+                    break;
+                case UpgradeOption.AddFreezeEffect:
+                {
+                    upgrade.Weapon.AddHitEffect(new FreezeHitEffect());
+                }
+                    break;
+                case UpgradeOption.AddKnockEffect:
+                {
+                    upgrade.Weapon.AddHitEffect(new KnockBackHitEffect());
+                }
+                    break;
+                case UpgradeOption.AddDamageModifier:
+                {
+                    upgrade.Weapon.AddModifier(new DamageModifier());
+                }
+                    break;
+                case UpgradeOption.AddFireRateModifier:
+                {
+                    upgrade.Weapon.AddModifier(new FireRateModifier());
+                }
+                    break;
+                case UpgradeOption.AddProjectSpeedModifier:
+                {
+                    upgrade.Weapon.AddModifier(new ProjectileSpeedModifier());
+                }
+                    break;
+                case UpgradeOption.AddPieceModifier:
+                {
+                    upgrade.Weapon.AddModifier(new PieceModifier());
+                }
+                    break;
+                case UpgradeOption.AddAoEModifier:
+                {
+                    upgrade.Weapon.AddModifier(new AoEModifier());
+                }
+                    break;
+                case UpgradeOption.AddSubSpawnModifier:
+                {
+                    upgrade.Weapon.AddModifier(new SubBulletModifier());
+                }
+                    break;
+            }
+            upgrade.Weapon.UpgradeList.Add(upgrade.Option);
         }
 
         #endregion

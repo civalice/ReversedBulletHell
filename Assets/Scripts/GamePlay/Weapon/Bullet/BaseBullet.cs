@@ -15,6 +15,7 @@ namespace Urxxx.GamePlay
         public float AoE => Weapon.AoERadius;
 
         #endregion
+
         #region Protect serialized fields
 
         [SerializeField] protected GameObject HitEffectPrefab;
@@ -47,6 +48,7 @@ namespace Urxxx.GamePlay
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (GameController.Instance.IsPause) return;
             if (!IsBulletLaunch) return;
             if (IsComplete()) 
                 Destroy(gameObject);

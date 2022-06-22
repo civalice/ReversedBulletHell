@@ -97,6 +97,11 @@ namespace Urxxx.GamePlay
             OnDeathAction += onDeath;
         }
 
+        public void ForceKill()
+        {
+            Death(this);
+        }
+
         #endregion
 
         #region Protect Method

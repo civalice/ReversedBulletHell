@@ -7,15 +7,12 @@ namespace Urxxx.GamePlay
 {
     public partial class DirectionalBullet : BaseBullet
     {
-        // Start is called before the first frame update
-        protected override void Start()
-        {
-
-        }
+        #region LifeCycle Method
 
         // Update is called once per frame
         protected override void Update()
         {
+            if (GameController.Instance.IsPause) return;
             base.Update();
 
             PreviousFramePosition = transform.position;
@@ -43,5 +40,7 @@ namespace Urxxx.GamePlay
         {
             Gizmos.DrawWireSphere(transform.position, BulletSize);
         }
+
+        #endregion
     }
 }
