@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Urxxx.GamePlay
 {
-    public class HolmingBullet : BaseBullet, IDamageDealer
+    public class HolmingBullet : BaseBullet
     {
         protected Transform Target;
 
@@ -19,31 +19,22 @@ namespace Urxxx.GamePlay
                 Target = SpawnSystem.Instance.GetNearestEnemy(transform.position, PiecingList).transform;
             }
 
+            if (Target == null) return;
+
             PreviousFramePosition = transform.position;
             transform.position += TargetDirection.normalized * ProjectileSpeed * Time.deltaTime;
-            LayerMask hitLayer = LayerMask.GetMask("Enemy");
-            RaycastHit2D[] hitList = GetHitCast(hitLayer);
 
-            foreach (var hit in hitList)
+            if ((Target.position - transform.position).magnitude < 0.1f)
             {
-                // If it hits something...
-                if (hit.collider != null && !PiecingList.Contains(hit.transform))
-                {
-                    //calculate collider range
-                    if (IsBetweenPreviousFrame(hit.point) || IsPointInsideCollider(hit.collider))
-                    {
-                        //Add to hit list
-                        PiecingList.Add(hit.transform);
-                        PlayHitEffect(hit.point);
-                        DamageSystem.Instance.DamagingTarget(this, hit.transform);
-                        if (PiecingList.Count >= PiecingCount)
-                            Destroy(gameObject);
-                    }
-                }
+                HitTarget(Target);
+                PlayHitEffect(Target.position);
             }
 
             if (Target != null)
-               TargetDirection = Target.position - transform.position;
+            {
+                TargetDirection = Target.position - transform.position;
+                if (PiecingList.Contains(Target)) Target = null;
+            }
         }
 
         protected void OnDrawGizmos()
@@ -55,11 +46,6 @@ namespace Urxxx.GamePlay
         {
             base.SetDirection(targetDirection);
             Target = SpawnSystem.Instance.GetNearestEnemy(transform.position).transform;
-        }
-
-        public float DealDamage()
-        {
-            return Damage;
         }
     }
 }

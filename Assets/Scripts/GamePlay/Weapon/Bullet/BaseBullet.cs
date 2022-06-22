@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Urxxx.GamePlay
 {
-    public abstract class BaseBullet : MonoBehaviour
+    public abstract class BaseBullet : MonoBehaviour, IDamageDealer
     {
         #region Protect serialized fields
 
@@ -25,6 +25,7 @@ namespace Urxxx.GamePlay
         protected bool IsBulletLaunch = false;
         protected Vector3 PreviousFramePosition;
         protected List<Transform> PiecingList = new List<Transform>();
+        protected List<BaseHitEffect> HitEffects = new List<BaseHitEffect>();
 
         #endregion
 
@@ -50,7 +51,7 @@ namespace Urxxx.GamePlay
 
         public void AddHitEffect(BaseHitEffect hitEffect)
         {
-            //Todo: Add Hit Effect
+            HitEffects.Add(hitEffect);
         }
 
         public virtual void SetupBullet(float damage, float speed, int piecingCount)
@@ -74,6 +75,19 @@ namespace Urxxx.GamePlay
         protected virtual bool IsComplete()
         {
             return (transform.position - StartPosition).magnitude > BulletRange;
+        }
+
+        protected virtual void HitTarget(Transform targetTransform)
+        {
+            PiecingList.Add(targetTransform);
+            var target = targetTransform.GetComponent<ITarget>();
+            if (target != null)
+            {
+                DamageSystem.Instance.DamagingTarget(this, target);
+                target.AddHitEffect(HitEffects);
+                if (PiecingList.Count >= PiecingCount)
+                    Destroy(gameObject);
+            }
         }
 
         protected virtual void PlayHitEffect(Vector2 hitPosition)
@@ -108,6 +122,16 @@ namespace Urxxx.GamePlay
                        Physics2D.OverlapCircleAll(transform.position, BulletSize).Contains(collider);
             else
                 return collider.OverlapPoint(PreviousFramePosition) || collider.OverlapPoint(transform.position);
+        }
+
+
+        #endregion
+
+        #region IDamageDealer implement
+
+        public virtual float DealDamage()
+        {
+            return Damage;
         }
 
         #endregion

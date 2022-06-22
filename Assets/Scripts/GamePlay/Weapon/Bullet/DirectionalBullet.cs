@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Urxxx.GamePlay
 {
-    public partial class DirectionalBullet : BaseBullet, IDamageDealer
+    public partial class DirectionalBullet : BaseBullet
     {
         // Start is called before the first frame update
         protected override void Start()
@@ -32,11 +32,8 @@ namespace Urxxx.GamePlay
                     if (IsBetweenPreviousFrame(hit.point) || IsPointInsideCollider(hit.collider))
                     {
                         //Add to hit list
-                        PiecingList.Add(hit.transform);
+                        HitTarget(hit.transform);
                         PlayHitEffect(hit.point);
-                        DamageSystem.Instance.DamagingTarget(this, hit.transform);
-                        if (PiecingList.Count >= PiecingCount) 
-                            Destroy(gameObject);
                     }
                 }
             }
@@ -46,15 +43,5 @@ namespace Urxxx.GamePlay
         {
             Gizmos.DrawWireSphere(transform.position, BulletSize);
         }
-
-
-        #region IDamageDealer implement
-
-        public float DealDamage()
-        {
-            return Damage;
-        }
-        
-        #endregion
     }
 }

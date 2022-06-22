@@ -38,14 +38,13 @@ namespace Urxxx.GamePlay
 
         #region Public Method
 
-        public void DamagingTarget(IDamageDealer dealer, Transform targetTransform)
+        public void DamagingTarget(IDamageDealer dealer, ITarget target)
         {
             float damage = dealer.DealDamage();
-            var target = targetTransform.GetComponent<ITarget>();
             if (target != null)
             {
                 target.DamageTaken(damage);
-                PopupDamageText(damage, targetTransform.position);
+                PopupDamageText(damage, target.GetTargetTransform().position);
             }
         }
 

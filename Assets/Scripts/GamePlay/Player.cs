@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Urxxx.GamePlay
@@ -108,6 +109,16 @@ namespace Urxxx.GamePlay
 
         #region ITarget Implementation
 
+        public T GetTargetComponent<T>()
+        {
+            return GetComponent<T>();
+        }
+
+        public void ModifyStat(BaseStatusEffect statusEffect)
+        {
+            //Do nothing since we not have any statusEffect for player.
+        }
+
         public void DamageTaken(float damage)
         {
             currentHealth -= damage;
@@ -115,6 +126,16 @@ namespace Urxxx.GamePlay
             {
                 Death();
             }
+        }
+
+        public void AddHitEffect(List<BaseHitEffect> hitEffects)
+        {
+            //Do nothing for player because no enemy cause any HitEffect yet.
+        }
+
+        public Transform GetTargetTransform()
+        {
+            return transform;
         }
 
         #endregion

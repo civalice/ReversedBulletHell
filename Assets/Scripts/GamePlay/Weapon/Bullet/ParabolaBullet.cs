@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Urxxx.GamePlay
 {
-    public class ParabolaBullet : BaseBullet, IDamageDealer
+    public class ParabolaBullet : BaseBullet
     {
         private float yForce = 0;
 
@@ -27,12 +27,8 @@ namespace Urxxx.GamePlay
                     //calculate collider range
                     if (IsBetweenPreviousFrame(hit.point) || IsPointInsideCollider(hit.collider))
                     {
-                        //Add to hit list
-                        PiecingList.Add(hit.transform);
+                        HitTarget(hit.transform);
                         PlayHitEffect(hit.point);
-                        DamageSystem.Instance.DamagingTarget(this, hit.transform);
-                        if (PiecingList.Count >= PiecingCount)
-                            Destroy(gameObject);
                     }
                 }
             }
@@ -55,11 +51,6 @@ namespace Urxxx.GamePlay
                 TargetDirection.Normalize();
             }
             yForce = 3 * ProjectileSpeed;
-        }
-
-        public float DealDamage()
-        {
-            return Damage;
         }
     }
 }

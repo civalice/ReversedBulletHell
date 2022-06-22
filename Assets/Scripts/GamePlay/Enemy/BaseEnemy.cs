@@ -30,6 +30,12 @@ namespace Urxxx.GamePlay
 
         #endregion
 
+        #region Private nonserialized fields
+
+        private List<BaseStatusEffect> statusEffectList = new List<BaseStatusEffect>();
+
+        #endregion
+
         private float attackRateTiming = 0;
 
         #region LifeCycle Method
@@ -51,6 +57,8 @@ namespace Urxxx.GamePlay
         protected void Update()
         {
             UpdateTarget();
+            UpdateHitEffect();
+
             attackRateTiming -= Time.deltaTime;
             if (CheckAttackRange())
             {
@@ -104,6 +112,24 @@ namespace Urxxx.GamePlay
             }
         }
 
+        private void UpdateHitEffect()
+        {
+            foreach (var statusEffect in statusEffectList)
+            {
+                statusEffect.UpdateEffect();
+            }
+
+            for (int i = 0; i < statusEffectList.Count; i++)
+            {
+                var statusEffect = statusEffectList[i];
+                if (statusEffect.IsComplete())
+                {
+                    statusEffectList.Remove(statusEffect);
+                    i--;
+                }
+            }
+        }
+
         private bool CheckAttackRange()
         {
             Vector3 targetVector = Target.transform.position - transform.position;
@@ -120,7 +146,8 @@ namespace Urxxx.GamePlay
         private bool TryAttack()
         {
             if (Target == null) return false;
-            DamageSystem.Instance.DamagingTarget(this, Target.transform);
+            var target = Target.GetComponent<ITarget>();
+            DamageSystem.Instance.DamagingTarget(this, target);
             return true;
         }
 
@@ -143,6 +170,20 @@ namespace Urxxx.GamePlay
                 OnDeathAction(this);
             }
         }
+        public Transform GetTargetTransform()
+        {
+            return transform;
+        }
+
+        public T GetTargetComponent<T>()
+        {
+            return GetComponent<T>();
+        }
+
+        public void ModifyStat(BaseStatusEffect stat)
+        {
+            //use stat to mod
+        }
 
         #endregion
 
@@ -151,6 +192,16 @@ namespace Urxxx.GamePlay
         public float DealDamage()
         {
             return Damage;
+        }
+
+        public void AddHitEffect(List<BaseHitEffect> hitEffects)
+        {
+            foreach (var hitEffect in hitEffects)
+            {
+                var statusEffect = hitEffect.CreateStatusEffect();
+                statusEffect.SetOwner(this);
+                statusEffectList.Add(statusEffect);
+            }
         }
 
         #endregion
