@@ -6,6 +6,10 @@ namespace Urxxx.GamePlay
 {
     public class UpgradeUI : MonoBehaviour
     {
+        public Button Button01;
+        public Button Button02;
+        public Button Button03;
+
         public Text Button01Txt;
         public Text Button02Txt;
         public Text Button03Txt;
@@ -33,17 +37,29 @@ namespace Urxxx.GamePlay
                 Upgrade03 = list[2];
                 Button03Txt.text = Upgrade03.GetStringUpgrade();
             }
+            else
+            {
+                Button03.gameObject.SetActive(false);
+            }
 
             if (list.Count >= 2)
             {
                 Upgrade02 = list[1];
                 Button02Txt.text = Upgrade02.GetStringUpgrade();
             }
+            else
+            {
+                Button02.gameObject.SetActive(false);
+            }
 
             if (list.Count >= 1)
             {
                 Upgrade01 = list[0];
                 Button01Txt.text = Upgrade01.GetStringUpgrade();
+            }
+            else
+            {
+                Button01.gameObject.SetActive(false);
             }
             gameObject.SetActive(true);
         }

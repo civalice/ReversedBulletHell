@@ -20,7 +20,7 @@ namespace Urxxx.GamePlay
 
         public bool IsStart => state == GameState.GamePlay || state == GameState.Upgrade;
         public bool IsPause => state == GameState.Upgrade;
-        public float ExpMultiplier => 1 + (currentLevel * 0.5f);
+        public float ExpMultiplier => 1 + (currentLevel * 0.2f);
         public int IncreaseSpawn => currentLevel * 3;
         public float HpMultiplier => 1 + (currentLevel * 0.2f);
 
@@ -104,8 +104,9 @@ namespace Urxxx.GamePlay
 
         public void ShowUpgrade()
         {
-            state = GameState.Upgrade;
             var upgradeList = UpgradeHelper.GetUpgradeList(player);
+            if (upgradeList.Count <= 0) return;
+            state = GameState.Upgrade;
             upgradeList.RandomRemove(3);
             upgradeUi.SetupUpgrade(upgradeList);
         }
@@ -124,7 +125,7 @@ namespace Urxxx.GamePlay
                 currentExperience = 0;
                 currentLevel++;
                 gameUi.SetLevel(currentLevel + 1); ;
-                nextLevelExperience += 100;
+                nextLevelExperience += (int)(100 * (1 + currentLevel * 0.5f));
                 ShowUpgrade();
             }
             gameUi.SetExpText($"{currentExperience}/{nextLevelExperience}");

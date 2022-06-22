@@ -5007,91 +5007,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilingOffset: {x: 0.32, y: 0.32, z: 0}
---- !u!1001 &55914116
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 132579782884787060, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 15.46875
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1033797094924843646, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382420996360111452, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_Name
-      value: HitEffect
-      objectReference: {fileID: 0}
-    - target: {fileID: 5449303938703232030, guid: 16467a498f111c34596a706070dda01c, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 16467a498f111c34596a706070dda01c, type: 3}
 --- !u!1 &67053536
 GameObject:
   m_ObjectHideFlags: 0
@@ -5599,6 +5514,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56766693cb2cfb418ef6f24bfd760eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Button01: {fileID: 1228992358}
+  Button02: {fileID: 477724134}
+  Button03: {fileID: 1909223364}
   Button01Txt: {fileID: 1570228238}
   Button02Txt: {fileID: 273423679}
   Button03Txt: {fileID: 1589535690}
